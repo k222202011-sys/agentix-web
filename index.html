@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgentiX Labs | AI Automation for Service Businesses</title>
+  <meta
+    name="description"
+    content="AgentiX Labs builds AI-powered booking and lead generation systems for med spas, clinics, salons, and service businesses."
+  >
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="shortcut icon" type="image/png" href="favicon.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ["Inter", "sans-serif"],
+          },
+          colors: {
+            brand: {
+              neon: "#00B4FF",
+              bg: "#050D1A",
+              card: "#0A1628",
+              border: "#0D3B6E",
+              muted: "#94A3B8",
+              cta: "#0D1F35",
+              footer: "#020810",
+            },
+          },
+          boxShadow: {
+            glow: "0 0 0 1px rgba(0,180,255,0.18), 0 0 24px rgba(0,180,255,0.12)",
+            "glow-strong": "0 0 0 1px rgba(0,180,255,0.28), 0 0 32px rgba(0,180,255,0.18)",
+          },
+        },
+      },
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+  <style>
+    :root {
+      --brand-neon: #00b4ff;
+      --brand-bg: #050d1a;
+      --brand-card: #0a1628;
+      --brand-border: #0d3b6e;
+      --brand-muted: #94a3b8;
+      --brand-cta: #0d1f35;
+      --brand-footer: #020810;
+      --glow-soft: 0 0 0 1px rgba(0, 180, 255, 0.16), 0 0 24px rgba(0, 180, 255, 0.12);
+      --glow-strong: 0 0 0 1px rgba(0, 180, 255, 0.28), 0 0 32px rgba(0, 180, 255, 0.18);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background:
+        radial-gradient(circle at top, rgba(0, 180, 255, 0.12), transparent 28%),
+        linear-gradient(180deg, #050d1a 0%, #071122 35%, #050d1a 100%);
+      color: #ffffff;
+      overflow-x: hidden;
+      text-rendering: optimizeLegibility;
+    }
+
+    section[data-section] {
+      content-visibility: auto;
+      contain-intrinsic-size: 1px 900px;
+    }
+
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(13, 59, 110, 0.28) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(13, 59, 110, 0.28) 1px, transparent 1px),
+        radial-gradient(circle at center, rgba(0, 180, 255, 0.15) 1px, transparent 1px);
+      background-size: 42px 42px, 42px 42px, 28px 28px;
+      background-position: center center;
+      mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0.45));
+      pointer-events: none;
+    }
+
+    .hero-glow {
+      position: absolute;
+      inset: auto 0 8%;
+      height: 340px;
+      background: radial-gradient(circle, rgba(0, 180, 255, 0.16) 0%, transparent 62%);
+      filter: blur(16px);
+      pointer-events: none;
+    }
+
+    .site-header {
+      background: rgba(5, 13, 26, 0.94);
+      box-shadow: 0 8px 24px rgba(2, 8, 16, 0.28);
+    }
+
+    .glass-card {
+      background:
+        linear-gradient(180deg, rgba(12, 26, 46, 0.94), rgba(8, 18, 34, 0.94));
+      border: 1px solid rgba(13, 59, 110, 0.9);
+      box-shadow: 0 14px 34px rgba(2, 8, 16, 0.2);
+      transition: transform 0.24s ease, box-shadow 0.24s ease, border-color 0.24s ease;
+    }
+
+    .glass-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(0, 180, 255, 0.45);
+      box-shadow: var(--glow-soft);
+    }
+
+    .section-fade {
+      opacity: 0;
+      transform: translate3d(0, 24px, 0);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+      will-change: opacity, transform;
+    }
+
+    .section-fade.is-visible {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+      will-change: auto;
+    }
+
+    .nav-link {
+      position: relative;
+      transition: color 0.25s ease;
+    }
+
+    .nav-link::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -0.35rem;
+      width: 100%;
+      height: 2px;
+      background: var(--brand-neon);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.25s ease;
+    }
+
+    .nav-link:hover::after,
+    .nav-link.active::after {
+      transform: scaleX(1);
+    }
+
+    .nav-link.active {
+      color: #ffffff;
+    }
+
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+
+    .section-label::after {
+      content: "";
+      width: 4.5rem;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(0, 180, 255, 0.95), rgba(0, 180, 255, 0.15));
+      box-shadow: 0 0 14px rgba(0, 180, 255, 0.2);
+    }
+
+    .flow-arrow {
+      color: rgba(0, 180, 255, 0.55);
+      font-size: 1.75rem;
+      line-height: 1;
+    }
+
+    .icon-ring {
+      background: linear-gradient(180deg, rgba(0, 180, 255, 0.18), rgba(13, 59, 110, 0.16));
+      border: 1px solid rgba(0, 180, 255, 0.2);
+      box-shadow: inset 0 0 24px rgba(0, 180, 255, 0.08);
+    }
+
+    .demo-frame::before {
+      content: "";
+      position: absolute;
+      inset: 1rem;
+      border: 1px dashed rgba(0, 180, 255, 0.2);
+      border-radius: 1rem;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .demo-frame > div {
+      position: relative;
+      z-index: 2;
+    }
+
+    .play-button {
+      box-shadow: 0 0 30px rgba(0, 180, 255, 0.18);
+    }
+
+    @media (max-width: 1023px) {
+      .flow-arrow {
+        transform: rotate(90deg);
+      }
+    }
+
+    @media (max-width: 639px) {
+      .section-label {
+        gap: 0.65rem;
+      }
+
+      .section-label::after {
+        width: 2.75rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      .section-fade,
+      .glass-card,
+      .nav-link::after {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+<body class="font-sans antialiased selection:bg-cyan-400/20 selection:text-white">
+  <header class="site-header fixed inset-x-0 top-0 z-50 border-b border-brand-border/60">
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-8">
+      <a href="#hero" class="flex items-center gap-3 leading-tight">
+        <img
+          src="favicon.png"
+          alt="AgentiX Labs logo"
+          class="h-11 w-11 rounded-xl border border-brand-border/70 bg-brand-bg/80 object-contain p-1 shadow-glow"
+        >
+        <span class="flex flex-col">
+          <span class="text-xl font-extrabold tracking-tight text-brand-neon">AgentiX <span class="text-white">Labs</span></span>
+          <span class="text-xs text-brand-muted">AI Automation for Service Businesses</span>
+        </span>
+      </a>
+
+      <nav class="hidden items-center gap-8 md:flex">
+        <a href="#how-it-works" class="nav-link text-sm font-medium text-brand-muted">How It Works</a>
+        <a href="#features" class="nav-link text-sm font-medium text-brand-muted">Features</a>
+        <a href="#demo" class="nav-link text-sm font-medium text-brand-muted">Demo</a>
+        <a href="#team" class="nav-link text-sm font-medium text-brand-muted">Team</a>
+        <a
+          href="https://api.whatsapp.com/send?phone=923195733577&text=Hi%20AgentiX%2C%20I%27d%20like%20to%20learn%20how%20your%20AI%20booking%20system%20could%20work%20for%20my%20business."
+          target="_blank"
+          rel="noreferrer"
+          class="rounded-full border border-brand-neon px-4 py-2 text-sm font-semibold text-white transition hover:shadow-glow"
+        >WhatsApp</a>
+      </nav>
+
+      <button
+        id="menu-toggle"
+        class="inline-flex items-center justify-center rounded-lg border border-brand-border p-2 text-white transition hover:border-brand-neon hover:shadow-glow md:hidden"
+        type="button"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        aria-label="Open navigation menu"
+      >
+        <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 7h16M4 12h16M4 17h16" />
+        </svg>
+      </button>
+    </div>
+
+    <div id="mobile-menu" class="hidden border-t border-brand-border/70 bg-brand-bg/95 md:hidden">
+      <nav class="mx-auto flex max-w-7xl flex-col px-6 py-4">
+        <a href="#how-it-works" class="mobile-link py-3 text-sm font-medium text-brand-muted">How It Works</a>
+        <a href="#features" class="mobile-link py-3 text-sm font-medium text-brand-muted">Features</a>
+        <a href="#demo" class="mobile-link py-3 text-sm font-medium text-brand-muted">Demo</a>
+        <a href="#team" class="mobile-link py-3 text-sm font-medium text-brand-muted">Team</a>
+        <a
+          href="https://api.whatsapp.com/send?phone=923195733577&text=Hi%20AgentiX%2C%20I%27d%20like%20to%20learn%20how%20your%20AI%20booking%20system%20could%20work%20for%20my%20business."
+          target="_blank"
+          rel="noreferrer"
+          class="mobile-link mt-3 inline-flex w-full items-center justify-center rounded-full border border-brand-neon px-4 py-3 text-sm font-semibold text-white transition hover:shadow-glow"
+        >WhatsApp</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section id="hero" data-section class="relative flex min-h-screen items-center overflow-hidden pt-28">
+      <div class="hero-grid"></div>
+      <div class="hero-glow"></div>
+      <div class="relative mx-auto grid max-w-7xl gap-16 px-6 py-16 lg:grid-cols-[1.15fr_0.85fr] lg:px-8">
+        <div class="section-fade is-visible flex flex-col justify-center">
+          <div class="mb-6 inline-flex w-fit items-center gap-3 rounded-full border border-brand-border bg-brand-card/70 px-4 py-2 text-sm text-brand-muted shadow-glow">
+            <span class="h-2 w-2 rounded-full bg-brand-neon"></span>
+            AI booking systems for service businesses
+          </div>
+          <h1 class="max-w-4xl text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-7xl">
+            Your Business Losing Bookings While You Sleep
+          </h1>
+          <p class="mt-6 max-w-2xl text-lg leading-8 text-brand-muted sm:text-xl">
+            We build AI systems that respond instantly 24/7, capture missed leads, and book appointments automatically
+            so your Business stops losing high-intent clients after hours.
+          </p>
+          <div class="mt-10 flex flex-col gap-4 sm:flex-row">
+            <a
+              href="#demo"
+              class="inline-flex items-center justify-center rounded-full bg-brand-neon px-7 py-3.5 text-base font-semibold text-slate-950 transition hover:-translate-y-0.5 hover:shadow-glow-strong"
+            >See the Demo</a>
+            <a
+              href="https://api.whatsapp.com/send?phone=923195733577&text=Hi%20AgentiX%2C%20I%27d%20like%20to%20learn%20how%20your%20AI%20booking%20system%20could%20work%20for%20my%20business."
+              target="_blank"
+              rel="noreferrer"
+              class="inline-flex items-center justify-center rounded-full border border-brand-neon px-7 py-3.5 text-base font-semibold text-white transition hover:-translate-y-0.5 hover:shadow-glow"
+            >Connect on WhatsApp</a>
+          </div>
+
+          <div class="mt-12 grid gap-4 sm:grid-cols-3">
+            <div class="glass-card rounded-2xl p-5">
+              <div class="text-3xl font-extrabold text-brand-neon" data-counter="30">0%</div>
+              <p class="mt-2 text-sm text-brand-muted">of inquiries happen after hours</p>
+            </div>
+            <div class="glass-card rounded-2xl p-5">
+              <div class="text-3xl font-extrabold text-brand-neon" data-counter="5" data-suffix=" min">0 min</div>
+              <p class="mt-2 text-sm text-brand-muted">avg delay = lost booking</p>
+            </div>
+            <div class="glass-card rounded-2xl p-5">
+              <div class="text-3xl font-extrabold text-brand-neon" data-counter="24" data-suffix="/7">0/7</div>
+              <p class="mt-2 text-sm text-brand-muted">AI response, zero delay</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-fade flex items-center justify-center">
+          <div class="glass-card relative w-full max-w-xl overflow-hidden rounded-3xl p-8 shadow-glow-strong">
+            <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-neon/70 to-transparent"></div>
+            <div class="mb-8">
+              <div class="text-4xl font-black tracking-tight text-brand-neon">AgentiX</div>
+              <p class="mt-2 text-sm uppercase tracking-[0.22em] text-brand-muted">AI appointment capture engine</p>
+            </div>
+            <div class="space-y-4">
+              <div class="rounded-2xl border border-brand-border bg-brand-bg/70 p-4">
+                <div class="flex items-start justify-between gap-4">
+                  <div>
+                    <p class="text-sm font-semibold text-white">New lead detected</p>
+                    <p class="mt-1 text-sm text-brand-muted">Website inquiry submitted at 9:14 PM</p>
+                  </div>
+                  <span class="rounded-full bg-brand-neon/15 px-3 py-1 text-xs font-semibold text-brand-neon">After Hours</span>
+                </div>
+              </div>
+              <div class="rounded-2xl border border-brand-border bg-brand-bg/70 p-4">
+                <p class="text-sm font-semibold text-white">AI reply sent in 42 seconds</p>
+                <p class="mt-2 text-sm leading-6 text-brand-muted">
+                  Hi Sarah, thanks for reaching out! We have openings tomorrow at 11:30 AM or 
+                  Friday at 2:00 PM. Which works best for you?
+                </p>
+              </div>
+              <div class="rounded-2xl border border-brand-border bg-brand-bg/70 p-4">
+                <div class="flex items-center justify-between gap-4">
+                  <div>
+                    <p class="text-sm font-semibold text-white">Appointment confirmed</p>
+                    <p class="mt-1 text-sm text-brand-muted">Calendar updated, reminder queued, CRM logged</p>
+                  </div>
+                  <span class="rounded-full border border-brand-neon/40 px-3 py-1 text-xs font-semibold text-white">Booked</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="problem" data-section class="section-fade mx-auto max-w-7xl px-6 py-24 lg:px-8">
+      <div class="max-w-2xl">
+        <p class="section-label text-sm font-semibold uppercase tracking-[0.22em] text-brand-neon">Problem</p>
+        <h2 class="mt-4 text-3xl font-bold tracking-tight text-white sm:text-4xl">Sound familiar?</h2>
+      </div>
+      <div class="mt-14 grid gap-6 lg:grid-cols-3">
+        <article class="glass-card rounded-3xl p-8">
+          <div class="icon-ring flex h-14 w-14 items-center justify-center rounded-2xl">
+            <svg class="h-7 w-7 text-brand-neon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2m5-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <h3 class="mt-6 text-xl font-semibold text-white">Missed after-hours leads</h3>
+          <p class="mt-3 leading-7 text-brand-muted">
+            A client asks about Botox or lip filler at 9pm. No one replies. By morning, they have already booked another med spa.
+          </p>
+        </article>
+        <article class="glass-card rounded-3xl p-8">
+          <div class="icon-ring flex h-14 w-14 items-center justify-center rounded-2xl">
+            <svg class="h-7 w-7 text-brand-neon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8 3v3m8-3v3M4 9h16M5 5h14a1 1 0 011 1v12a1 1 0 01-1 1H5a1 1 0 01-1-1V6a1 1 0 011-1z" />
+            </svg>
+          </div>
+          <h3 class="mt-6 text-xl font-semibold text-white">Manual booking wastes staff time</h3>
+          <p class="mt-3 leading-7 text-brand-muted">
+            Your front desk keeps juggling consults, follow-ups, and reschedules for facials, laser, and injectables instead of serving clients in-clinic.
+          </p>
+        </article>
+        <article class="glass-card rounded-3xl p-8">
+          <div class="icon-ring flex h-14 w-14 items-center justify-center rounded-2xl">
+            <svg class="h-7 w-7 text-brand-neon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 19h16M7 15l3-3 3 2 4-5" />
+            </svg>
+          </div>
+          <h3 class="mt-6 text-xl font-semibold text-white">No follow-up system</h3>
+          <p class="mt-3 leading-7 text-brand-muted">
+            Leads who ask about pricing, recovery time, or availability never get nurtured, so high-value treatments slip away quietly.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section id="industries" data-section class="section-fade mx-auto max-w-7xl px-6 py-10 lg:px-8">
+      <div class="glass-card rounded-[2rem] p-6 sm:p-8">
+        <div class="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p class="section-label text-sm font-semibold uppercase tracking-[0.22em] text-brand-neon">Who We Help</p>
+          </div>
+          <div class="grid gap-3 sm:grid-cols-2 xl:grid-cols-3 xl:gap-4">
+            <div class="inline-flex items-center gap-3 rounded-full border border-brand-border bg-brand-bg/60 px-4 py-3 text-sm font-medium text-white">
+              <svg class="h-4 w-4 text-brand-neon" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+                <circle cx="8" cy="8" r="4" />
+              </svg>
+              <span>Medical Spas</span>
+            </div>
+            <div class="inline-flex items-center gap-3 rounded-full border border-brand-border bg-brand-bg/60 px-4 py-3 text-sm font-medium text-white">
+              <svg class="h-4 w-4 text-brand-neon" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+                <circle cx="8" cy="8" r="4" />
+              </svg>
+              <span>Dental Clinics</span>
+            </div>
+            <div class="inline-flex items-center gap-3 rounded-full border border-brand-border bg-brand-bg/60 px-4 py-3 text-sm font-medium text-white">
+              <svg class="h-4 w-4 text-brand-neon" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+                <circle cx="8" cy="8" r="4" />
+              </svg>
+              <span>Salons &amp; Spas</span>
+            </div>
+            <div class="inline-flex items-center gap-3 rounded-full border border-brand-border bg-brand-bg/60 px-4 py-3 text-sm font-medium text-white">
+              <svg class="h-4 w-4 text-brand-neon" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+                <circle cx="8" cy="8" r="4" />
+              </svg>
+              <span>Real Estate</span>
+            </div>
+            <div class="inline-flex items-center gap-3 rounded-full border border-brand-border bg-brand-bg/60 px-4 py-3 text-sm font-medium text-white">
+              <svg class="h-4 w-4 text-brand-neon" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+                <circle cx="8" cy="8" r="4" />
+              </svg>
+              <span>Law Firms</span>
+            </div>
+            <div class="inline-flex items-center gap-3 rounded-full border border-brand-border bg-brand-bg/60 px-4 py-3 text-sm font-medium text-white">
+              <svg class="h-4 w-4 text-brand-neon" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+                <circle cx="8" cy="8" r="4" />
+              </svg>
+              <span>Any Service Business</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="how-it-works" data-section class="section-fade mx-auto max-w-7xl px-6 py-24 lg:px-8">
+      <div class="mx-auto max-w-3xl text-center">
+        <p class="section-label justify-center text-sm font-semibold uppercase tracking-[0.22em] text-brand-neon">How It Works</p>
+        <h2 class="mt-4 text-3xl font-bold tracking-tight text-white sm:text-4xl">How AgentiX works</h2>
+        <p class="mt-4 text-lg text-brand-muted">From inquiry to confirmed appointment — fully automated</p>
+      </div>
+
+      <div class="mt-16 grid items-center gap-8 lg:grid-cols-[1fr_auto_1fr_auto_1fr]">
+        <article class="glass-card rounded-3xl p-8 text-center">
+          <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-full border border-brand-neon/30 bg-brand-neon/10 text-lg font-bold text-brand-neon">1</div>
+          <div class="icon-ring mx-auto mt-5 flex h-14 w-14 items-center justify-center rounded-2xl">
+            <svg class="h-7 w-7 text-brand-neon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 5h16v10H7l-3 3V5z" />
+            </svg>
+          </div>
+          <h3 class="mt-6 text-xl font-semibold text-white">Lead Arrives</h3>
+          <p class="mt-3 leading-7 text-brand-muted">
+            Client fills your form or sends a message — anytime, day or night
+          </p>
+        </article>
+
+        <div class="flow-arrow mx-auto hidden lg:block">→</div>
+        <div class="flow-arrow mx-auto lg:hidden">→</div>
+
+        <article class="glass-card rounded-3xl p-8 text-center">
+          <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-full border border-brand-neon/30 bg-brand-neon/10 text-lg font-bold text-brand-neon">2</div>
+          <div class="icon-ring mx-auto mt-5 flex h-14 w-14 items-center justify-center rounded-2xl">
+            <svg class="h-7 w-7 text-brand-neon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v6m0 0a3 3 0 100 6m0-6a3 3 0 110 6m0 0v6m-7-3h14" />
+            </svg>
+          </div>
+          <h3 class="mt-6 text-xl font-semibold text-white">AI Responds</h3>
+          <p class="mt-3 leading-7 text-brand-muted">
+            Our AI responds in under 60 seconds, answers questions, checks availability
+          </p>
+        </article>
+
+        <div class="flow-arrow mx-auto hidden lg:block">→</div>
+        <div class="flow-arrow mx-auto lg:hidden">→</div>
+
+        <article class="glass-card rounded-3xl p-8 text-center">
+          <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-full border border-brand-neon/30 bg-brand-neon/10 text-lg font-bold text-brand-neon">3</div>
+          <div class="icon-ring mx-auto mt-5 flex h-14 w-14 items-center justify-center rounded-2xl">
+            <svg class="h-7 w-7 text-brand-neon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5 12l5 5L20 7" />
+            </svg>
+          </div>
+          <h3 class="mt-6 text-xl font-semibold text-white">Appointment Booked</h3>
+          <p class="mt-3 leading-7 text-brand-muted">
+            Slot confirmed, calendar updated, reminder sent — zero manual work
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section id="features" data-section class="section-fade mx-auto max-w-7xl px-6 py-24 lg:px-8">
+      <div class="max-w-3xl">
+        <p class="section-label text-sm font-semibold uppercase tracking-[0.22em] text-brand-neon">Features</p>
+        <h2 class="mt-4 text-3xl font-bold tracking-tight text-white sm:text-4xl">Everything included</h2>
+      </div>
+
+      <div class="mt-14 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+        <article class="glass-card rounded-3xl p-7">
+          <h3 class="text-xl font-semibold text-white">Instant AI Response</h3>
+          <p class="mt-3 leading-7 text-brand-muted">Responds to every inquiry in under 60 seconds, 24/7</p>
+        </article>
+        <article class="glass-card rounded-3xl p-7">
+          <h3 class="text-xl font-semibold text-white">Smart Scheduling</h3>
+          <p class="mt-3 leading-7 text-brand-muted">Checks real availability and books the right slot automatically</p>
+        </article>
+        <article class="glass-card rounded-3xl p-7">
+          <h3 class="text-xl font-semibold text-white">Alternate Slot Suggestions</h3>
+          <p class="mt-3 leading-7 text-brand-muted">If preferred time is taken, AI suggests next best options</p>
+        </article>
+        <article class="glass-card rounded-3xl p-7">
+          <h3 class="text-xl font-semibold text-white">Automated Reminders</h3>
+          <p class="mt-3 leading-7 text-brand-muted">Sends confirmation and reminder emails to reduce no-shows</p>
+        </article>
+        <article class="glass-card rounded-3xl p-7">
+          <h3 class="text-xl font-semibold text-white">CRM &amp; Sheet Logging</h3>
+          <p class="mt-3 leading-7 text-brand-muted">Every lead logged automatically in your system</p>
+        </article>
+        <article class="glass-card rounded-3xl p-7">
+          <h3 class="text-xl font-semibold text-white">Custom AI Persona</h3>
+          <p class="mt-3 leading-7 text-brand-muted">AI responds in your brand voice, not a generic bot</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="demo" data-section class="section-fade mx-auto max-w-7xl px-6 py-24 lg:px-8">
+      <div class="mx-auto max-w-3xl text-center">
+        <p class="section-label justify-center text-sm font-semibold uppercase tracking-[0.22em] text-brand-neon">Demo</p>
+        <h2 class="mt-4 text-3xl font-bold tracking-tight text-white sm:text-4xl">See it in action</h2>
+        <p class="mt-4 text-lg text-brand-muted">Watch the full booking flow in action</p>
+      </div>
+
+      <div class="mt-14">
+        <div class="demo-frame glass-card relative mx-auto max-w-5xl rounded-[1.75rem] p-4 sm:p-6">
+          <div class="overflow-hidden rounded-[1.25rem] border border-brand-border/70 bg-slate-950">
+            <video
+              class="aspect-video w-full"
+              controls
+              preload="metadata"
+              playsinline
+            >
+              <source src="video/Fixing%20Booking%20Availability%20and%20Instant%20Suggestions.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+        </div>
+        <div class="mt-10 text-center">
+          <p class="text-lg text-brand-muted">
+            Want to see this built for YOUR business? Message us on WhatsApp.
+          </p>
+          <a
+            href="https://api.whatsapp.com/send?phone=923195733577&text=Hi%20AgentiX%2C%20I%27d%20like%20to%20learn%20how%20your%20AI%20booking%20system%20could%20work%20for%20my%20business."
+            target="_blank"
+            rel="noreferrer"
+            class="mt-6 inline-flex items-center justify-center rounded-full bg-brand-neon px-7 py-3.5 text-base font-semibold text-slate-950 transition hover:-translate-y-0.5 hover:shadow-glow-strong"
+          >Connect on WhatsApp</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="team" data-section class="section-fade mx-auto max-w-7xl px-6 py-24 lg:px-8">
+      <div class="mx-auto max-w-3xl text-center">
+        <p class="section-label justify-center text-sm font-semibold uppercase tracking-[0.22em] text-brand-neon">Team</p>
+        <h2 class="mt-4 text-3xl font-bold tracking-tight text-white sm:text-4xl">Built by engineers, not marketers</h2>
+        <p class="mt-4 text-lg text-brand-muted">
+          We don't sell templates. We build custom AI systems tailored to your business.
+        </p>
+      </div>
+
+      <div class="mt-14 grid gap-6 lg:grid-cols-2">
+        <article class="glass-card rounded-3xl p-8">
+          <div class="flex h-14 w-14 items-center justify-center rounded-2xl border border-brand-neon/25 bg-brand-neon/10 text-lg font-bold text-brand-neon">MS</div>
+          <h3 class="mt-6 text-2xl font-semibold text-white">M. Shakeel Khan</h3>
+          <p class="mt-2 text-sm uppercase tracking-[0.22em] text-brand-neon">AI Systems Engineer</p>
+          <p class="mt-5 leading-7 text-brand-muted">
+            CS graduate specializing in AI pipelines, computer vision, and automation systems. Built end-to-end AI
+            systems from multi-camera sports tracking to intelligent booking agents.
+          </p>
+          <a
+            href="https://www.linkedin.com/in/shakeel-khan01/"
+            target="_blank"
+            rel="noreferrer"
+            class="mt-6 inline-flex items-center justify-center rounded-full border border-brand-neon px-5 py-3 text-sm font-semibold text-white transition hover:shadow-glow"
+          >LinkedIn</a>
+        </article>
+        <article class="glass-card rounded-3xl p-8">
+          <div class="flex h-14 w-14 items-center justify-center rounded-2xl border border-brand-neon/25 bg-brand-neon/10 text-lg font-bold text-brand-neon">M</div>
+          <h3 class="mt-6 text-2xl font-semibold text-white">Malaika Tariq</h3>
+          <p class="mt-2 text-sm uppercase tracking-[0.22em] text-brand-neon">Agentic AI Engineer</p>
+          <p class="mt-5 leading-7 text-brand-muted">
+            Builds production-level agentic AI workflows professionally. Specializes in LLM-powered automation,
+            multi-step agent flows, and business process optimization.
+          </p>
+          <a
+            href="https://www.linkedin.com/in/malaika-tariq-81b680306/"
+            target="_blank"
+            rel="noreferrer"
+            class="mt-6 inline-flex items-center justify-center rounded-full border border-brand-neon px-5 py-3 text-sm font-semibold text-white transition hover:shadow-glow"
+          >LinkedIn</a>
+        </article>
+      </div>
+
+      <p class="mt-10 text-center text-base text-brand-muted">agentixlabsai@gmail.com</p>
+    </section>
+
+    <section id="booking" data-section class="section-fade bg-brand-cta/90">
+      <div class="mx-auto max-w-5xl px-6 py-24 text-center lg:px-8">
+        <p class="section-label justify-center text-sm font-semibold uppercase tracking-[0.22em] text-brand-neon">WhatsApp</p>
+        <h2 class="mt-4 text-3xl font-bold tracking-tight text-white sm:text-5xl">Ready to stop losing bookings?</h2>
+        <p class="mx-auto mt-5 max-w-3xl text-lg leading-8 text-brand-muted">
+          Message us on WhatsApp and we'll show you exactly how this works for your business — fast, direct, and no fluff.
+        </p>
+        <a
+          href="https://api.whatsapp.com/send?phone=923195733577&text=Hi%20AgentiX%2C%20I%27d%20like%20to%20learn%20how%20your%20AI%20booking%20system%20could%20work%20for%20my%20business."
+          target="_blank"
+          rel="noreferrer"
+          class="mt-10 inline-flex items-center justify-center rounded-full bg-brand-neon px-8 py-4 text-base font-semibold text-slate-950 transition hover:-translate-y-0.5 hover:shadow-glow-strong"
+        >Connect on WhatsApp →</a>
+        <p class="mt-6 text-base text-brand-muted">Or email us directly: agentixlabsai@gmail.com</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-brand-footer">
+    <div class="mx-auto grid max-w-7xl gap-10 px-6 py-14 lg:grid-cols-3 lg:px-8">
+      <div>
+        <div class="text-2xl font-extrabold tracking-tight text-brand-neon">AgentiX <span class="text-white">Labs</span></div>
+        <p class="mt-3 max-w-xs text-sm leading-6 text-brand-muted">AI Automation for Service Businesses</p>
+      </div>
+
+      <nav class="flex flex-row flex-wrap items-center justify-center gap-x-6 gap-y-3 text-sm text-brand-muted lg:justify-center">
+        <a href="#how-it-works" class="transition hover:text-white">How It Works</a>
+        <a href="#features" class="transition hover:text-white">Features</a>
+        <a href="#demo" class="transition hover:text-white">Demo</a>
+        <a href="#team" class="transition hover:text-white">Team</a>
+        <a href="#booking" class="transition hover:text-white">WhatsApp</a>
+      </nav>
+
+      <div class="lg:text-right">
+        <p class="text-sm text-brand-muted">agentixlabsai@gmail.com</p>
+        <div class="mt-4 flex gap-3 lg:justify-end">
+          <a
+            href="https://www.linkedin.com/in/shakeel-khan01/"
+            target="_blank"
+            rel="noreferrer"
+            class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-brand-border text-brand-muted transition hover:border-brand-neon hover:text-white hover:shadow-glow"
+            aria-label="LinkedIn profile"
+          >
+            <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M6.94 8.5H3.56V20h3.38V8.5zM5.25 3A1.97 1.97 0 003.3 4.97c0 1.08.86 1.97 1.93 1.97h.02c1.1 0 1.97-.9 1.97-1.97A1.96 1.96 0 005.27 3h-.02zM20.44 12.62c0-3.1-1.65-4.54-3.85-4.54-1.78 0-2.58.98-3.03 1.67V8.5h-3.38c.04.83 0 11.5 0 11.5h3.38v-6.42c0-.34.03-.68.13-.92.27-.68.88-1.38 1.9-1.38 1.34 0 1.88 1.03 1.88 2.53V20H21c0 0 .04-6.3.04-7.38z" />
+            </svg>
+          </a>
+          <a
+            href="https://www.linkedin.com/in/malaika-tariq-81b680306/"
+            target="_blank"
+            rel="noreferrer"
+            class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-brand-border text-brand-muted transition hover:border-brand-neon hover:text-white hover:shadow-glow"
+            aria-label="LinkedIn profile"
+          >
+            <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M6.94 8.5H3.56V20h3.38V8.5zM5.25 3A1.97 1.97 0 003.3 4.97c0 1.08.86 1.97 1.93 1.97h.02c1.1 0 1.97-.9 1.97-1.97A1.96 1.96 0 005.27 3h-.02zM20.44 12.62c0-3.1-1.65-4.54-3.85-4.54-1.78 0-2.58.98-3.03 1.67V8.5h-3.38c.04.83 0 11.5 0 11.5h3.38v-6.42c0-.34.03-.68.13-.92.27-.68.88-1.38 1.9-1.38 1.34 0 1.88 1.03 1.88 2.53V20H21c0 0 .04-6.3.04-7.38z" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="border-t border-brand-border/60">
+      <div class="mx-auto max-w-7xl px-6 py-5 text-sm text-brand-muted lg:px-8">
+        © 2025 AgentiX Labs. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const menuToggle = document.getElementById("menu-toggle");
+    const mobileMenu = document.getElementById("mobile-menu");
+    const mobileLinks = document.querySelectorAll(".mobile-link");
+    const navLinks = document.querySelectorAll(".nav-link");
+    const sections = document.querySelectorAll("[data-section]");
+    const fadeElements = document.querySelectorAll(".section-fade");
+    const counters = document.querySelectorAll("[data-counter]");
+
+    if (menuToggle && mobileMenu) {
+      menuToggle.addEventListener("click", () => {
+        const isOpen = !mobileMenu.classList.contains("hidden");
+        mobileMenu.classList.toggle("hidden");
+        menuToggle.setAttribute("aria-expanded", String(!isOpen));
+      });
+
+      mobileLinks.forEach((link) => {
+        link.addEventListener("click", () => {
+          mobileMenu.classList.add("hidden");
+          menuToggle.setAttribute("aria-expanded", "false");
+        });
+      });
+    }
+
+    const fadeObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+          }
+        });
+      },
+      {
+        threshold: 0.15,
+      }
+    );
+
+    fadeElements.forEach((element) => {
+      if (!element.classList.contains("is-visible")) {
+        fadeObserver.observe(element);
+      }
+    });
+
+    const animateCounter = (element) => {
+      const target = Number(element.dataset.counter);
+      const suffix = element.dataset.suffix || "%";
+      const duration = 1400;
+      const startTime = performance.now();
+
+      const step = (currentTime) => {
+        const progress = Math.min((currentTime - startTime) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const value = Math.round(target * eased);
+        element.textContent = `${value}${suffix}`;
+
+        if (progress < 1) {
+          window.requestAnimationFrame(step);
+        }
+      };
+
+      window.requestAnimationFrame(step);
+    };
+
+    counters.forEach((counter) => animateCounter(counter));
+
+    const linkMap = new Map(
+      Array.from(navLinks).map((link) => [link.getAttribute("href"), link])
+    );
+
+    const sectionObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const id = `#${entry.target.id}`;
+          const link = linkMap.get(id);
+
+          if (entry.isIntersecting && link) {
+            navLinks.forEach((navLink) => navLink.classList.remove("active"));
+            link.classList.add("active");
+          }
+        });
+      },
+      {
+        rootMargin: "-40% 0px -45% 0px",
+        threshold: 0.05,
+      }
+    );
+
+    sections.forEach((section) => {
+      sectionObserver.observe(section);
+    });
+  </script>
+</body>
+</html>
